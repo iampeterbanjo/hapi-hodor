@@ -63,9 +63,9 @@ In the example above, only logged in users are able to access `/dashboard`, as d
 
 Authentication is managed by [Auth0](https://auth0.com/). A few steps are required to finish the integration.
 
-1.  [Sign up for Auth0](https://auth0.com/)
-2.  [Set up an Auth0 Application](https://auth0.com/docs/applications/application-types)
-3.  [Provide credentials from Auth0](#plugin-options)
+1. [Sign up for Auth0](https://auth0.com/)
+2. [Set up an Auth0 Application](https://auth0.com/docs/applications/application-types)
+3. [Provide credentials from Auth0](#plugin-options)
 
 After users log in, a session cookie is created for them so that the server remembers them on future requests. The cookie is stateless, encrypted, and secured using flags such as `HttpOnly`. The user's [Auth0 profile](https://auth0.com/docs/user-profile/normalized/oidc) is automatically retrieved and stored in the session when they log in. You can access the profile data at `request.auth.credentials.user`. See [@hapi/cookie](https://github.com/hapijs/hapi-auth-cookie) and [iron](https://github.com/hueniverse/iron) for details about the cookie implementation and security.
 
