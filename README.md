@@ -21,10 +21,7 @@ const Hodor = require('hapi-hodor');
 const server = new Hapi.server();
 
 const init = async () => {
-  await server.register([
-    Bell,
-    Cookie,
-    {
+  await server.register({
       plugin: Hodor,
       options: {
         sessionSecretKey: process.env.SESSION_SECRET_KEY,
@@ -32,8 +29,7 @@ const init = async () => {
         auth0PublicKey: process.env.AUTH0_PUBLIC_KEY,
         auth0SecretKey: process.env.AUTH0_SECRET_KEY,
       },
-    },
-  ]);
+  });
   server.route({
     method: 'GET',
     path: '/dashboard',
