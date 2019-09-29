@@ -10,7 +10,6 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const accept_1 = __importDefault(require("@hapi/accept"));
 const joi_1 = __importDefault(require("@hapi/joi"));
 const url_type_1 = require("url-type");
-const package_json_1 = require("../package.json");
 const defaultParams = request => {
     const { screen = '' } = request.query || {};
     const lastScreen = Array.isArray(screen) ? screen[screen.length - 1] : screen;
@@ -134,8 +133,8 @@ const register = async (server, option) => {
 };
 exports.default = {
     register,
-    name: package_json_1.name,
-    version: package_json_1.version,
+    name: process.env.npm_package_name,
+    version: process.env.npm_package_version,
     dependencies: ['@hapi/cookie', '@hapi/bell'],
 };
 //# sourceMappingURL=index.js.map

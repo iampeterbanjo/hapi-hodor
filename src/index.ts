@@ -6,7 +6,6 @@ import Boom from '@hapi/boom';
 import Accept from '@hapi/accept';
 import Joi from '@hapi/joi';
 import { hasHost } from 'url-type';
-import { name, version } from '../package.json';
 
 const defaultParams = request => {
 	const { screen = '' } = request.query || {};
@@ -150,7 +149,7 @@ const register = async (server, option) => {
 
 export default {
 	register,
-	name,
-	version,
+	name: process.env.npm_package_name,
+	version: process.env.npm_package_version,
 	dependencies: ['@hapi/cookie', '@hapi/bell'],
 };
