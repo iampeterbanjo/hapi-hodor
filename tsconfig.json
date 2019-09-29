@@ -1,8 +1,25 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"outDir": "./build"
-	},
-	"include": ["src/**/*", "factory/**/*"],
-	"exclude": ["node_modules", "build"]
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "pretty": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "outDir": "./build"
+  },
+  "include": ["src/**/*", "factory/**/*"],
+  "exclude": ["node_modules", "build", "!node_modules/@types"]
 }
