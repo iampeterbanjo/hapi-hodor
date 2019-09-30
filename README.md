@@ -14,21 +14,19 @@ Register the plugin on your server to add the `/login` and `/logout` routes, as 
 
 ```js
 const Hapi = require('@hapi/hapi');
-const Bell = require('@hapi/bell');
-const Cookie = require('@hapi/cookie');
 const Hodor = require('hapi-hodor');
 
 const server = new Hapi.server();
 
 const init = async () => {
   await server.register({
-      plugin: Hodor,
-      options: {
-        sessionSecretKey: process.env.SESSION_SECRET_KEY,
-        auth0Domain: process.env.AUTH0_DOMAIN,
-        auth0PublicKey: process.env.AUTH0_PUBLIC_KEY,
-        auth0SecretKey: process.env.AUTH0_SECRET_KEY,
-      },
+    plugin: Hodor,
+    options: {
+      sessionSecretKey: process.env.SESSION_SECRET_KEY,
+      auth0Domain: process.env.AUTH0_DOMAIN,
+      auth0PublicKey: process.env.AUTH0_PUBLIC_KEY,
+      auth0SecretKey: process.env.AUTH0_SECRET_KEY,
+    },
   });
   server.route({
     method: 'GET',
