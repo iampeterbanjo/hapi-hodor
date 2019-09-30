@@ -1,15 +1,16 @@
 import Boom from '@hapi/boom';
 import Path from 'path';
 import { hasHost } from 'url-type';
+import { Config } from './types';
 
 export default class Controller {
-	config;
+	config: Config;
 
-	constructor(config) {
+	constructor(config: Config) {
 		this.config = config;
 	}
 
-	resolveNext = query => {
+	resolveNext = (query: { [key: string]: string }) => {
 		const { next } = query;
 		const lastNext = Array.isArray(next) ? next[next.length - 1] : next;
 		if (hasHost(lastNext)) {

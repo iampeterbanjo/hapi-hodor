@@ -8,6 +8,7 @@ import Joi from '@hapi/joi';
 import { hasHost } from 'url-type';
 import { vars } from './utils';
 import Controller from './controller';
+
 const defaultParams = request => {
 	const { screen = '' } = request.query || {};
 	const lastScreen = Array.isArray(screen) ? screen[screen.length - 1] : screen;
