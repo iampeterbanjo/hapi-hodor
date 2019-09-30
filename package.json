@@ -13,7 +13,7 @@
 		"test-badges": "cat coverage/lcov.info | npx coverbadge -o ./badges/coverage.svg",
 		"format": "pretty-quick --staged",
 		"watch-ts": "tsc-watch -p tsconfig.build.json",
-		"watch-test": "nodemon --watch src -e ts,json -x 'run-s test'",
+		"watch-test": "npm run test-jest -- --watch",
 		"before-commit": "run-s format test test-badges commit-badges",
 		"commit-badges": "git add './badges/coverage.svg'"
 	},

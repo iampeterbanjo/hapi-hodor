@@ -1,6 +1,4 @@
 import Hapi from '@hapi/hapi';
-import Cookie from '@hapi/cookie';
-import Bell from '@hapi/bell';
 import Hodor from '.';
 
 const makeRoute = (option = {}) => {
