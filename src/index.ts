@@ -1,11 +1,8 @@
 import Bell from '@hapi/bell';
 import Cookie from '@hapi/cookie';
 
-import Path from 'path';
-import Boom from '@hapi/boom';
 import Accept from '@hapi/accept';
 import Joi from '@hapi/joi';
-import { hasHost } from 'url-type';
 import { vars } from './utils';
 import Controller from './controller';
 
@@ -88,17 +85,6 @@ const register = async (server, option) => {
 		providerParams: config.providerParams,
 	});
 
-	const resolveNext = query => {
-		const { next } = query;
-		const lastNext = Array.isArray(next) ? next[next.length - 1] : next;
-		if (hasHost(lastNext)) {
-			throw Boom.badRequest(
-				'Absolute URLs are not allowed in the `next` parameter for security reasons',
-			);
-		}
-		return Path.posix.resolve('/', lastNext || '');
-	};
-
 	const controller = new Controller(config);
 
 	server.route({
@@ -112,23 +98,7 @@ const register = async (server, option) => {
 				mode: 'try',
 			},
 		},
-		handler(request, h) {
-			const { auth } = request;
-			if (auth.isAuthenticated) {
-				// Credentials also have: .expiresIn, .token, .refreshToken
-				// Put the Auth0 profile in a cookie. The browser may ignore it If it is too big.
-				request.cookieAuth.set({ user: auth.credentials.profile });
-				return h.redirect(resolveNext(auth.credentials.query));
-			}
-			// This happens when users deny us access to their OAuth provider.
-			// Chances are they clicked the wrong social icon.
-			if (auth.error.message.startsWith('App rejected')) {
-				// Give the user another chance to login.
-				return h.redirect('/login');
-			}
-
-			throw Boom.unauthorized(auth.error.message);
-		},
+		handler: controller.handleLogin,
 	});
 
 	server.route({
