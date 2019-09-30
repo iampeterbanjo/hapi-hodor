@@ -12,7 +12,7 @@
 		"test": "run-s test-ci test-badges",
 		"test-badges": "jest-coverage-badges output ./badges",
 		"watch-ts": "tsc-watch -p tsconfig.build.json",
-		"watch-test": "nodemon --watch src -e ts,json -x 'run-s test-jest test-badges'"
+		"watch-test": "nodemon --watch src -e ts,json -x 'run-s test'"
 	},
 	"author": {
 		"email": "npm@iampeterbanjo.com",
