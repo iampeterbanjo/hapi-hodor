@@ -1,12 +1,13 @@
 import Bell from '@hapi/bell';
 import Cookie from '@hapi/cookie';
-
 import Accept from '@hapi/accept';
-import { vars, getConfig } from './utils';
+
+import { vars, getConfig, time } from './utils';
 import Controller from './controller';
 
 const redirectTo = ({ headers }) => {
 	const [favoriteType] = Accept.mediaTypes(headers.accept);
+
 	return ['text/html', 'text/*'].includes(favoriteType) && '/login';
 };
 
@@ -34,7 +35,7 @@ const register = async (server, option) => {
 		config: {
 			domain: config.auth0Domain,
 		},
-		ttl: 1000 * 60 * 60 * 24,
+		ttl: time.oneDay,
 		password: config.sessionSecretKey,
 		clientId: config.auth0PublicKey,
 		clientSecret: config.auth0SecretKey,
