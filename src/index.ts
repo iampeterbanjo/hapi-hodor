@@ -7,7 +7,7 @@ import Accept from '@hapi/accept';
 import Joi from '@hapi/joi';
 import { hasHost } from 'url-type';
 import { vars } from './utils';
-
+import Controller from './controller';
 const defaultParams = request => {
 	const { screen = '' } = request.query || {};
 	const lastScreen = Array.isArray(screen) ? screen[screen.length - 1] : screen;
@@ -98,6 +98,8 @@ const register = async (server, option) => {
 		return Path.posix.resolve('/', lastNext || '');
 	};
 
+	const controller = new Controller(config);
+
 	server.route({
 		method: 'GET',
 		path: '/login',
@@ -136,15 +138,7 @@ const register = async (server, option) => {
 			tags: ['user', 'auth', 'session', 'logout'],
 			auth: false,
 		},
-		handler(request, h) {
-			request.cookieAuth.clear();
-			const returnTo = encodeURIComponent(
-				'https://' + request.info.host + resolveNext(request.query),
-			);
-			return h.redirect(
-				`https://${config.auth0Domain}/v2/logout?returnTo=${returnTo}`,
-			);
-		},
+		handler: controller.handleLogout,
 	});
 };
 
