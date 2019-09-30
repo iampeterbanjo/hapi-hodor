@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import Hodor from '.';
+import plugin from './plugin';
 
 const makeRoute = (option = {}) => {
 	return {
@@ -17,7 +17,7 @@ const makeServer = async (option = {}) => {
 
 	await server.register([
 		{
-			plugin: Hodor,
+			plugin,
 			options: {
 				sessionSecretKey: 'pleasemakethissignificantlymoresecure',
 				auth0Domain: 'my-app.auth0.com',
