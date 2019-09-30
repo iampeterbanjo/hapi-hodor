@@ -10,9 +10,12 @@
 		"test-ci": "CI=true jest",
 		"test-jest": "node --trace-warnings node_modules/.bin/jest --changedFilesWithAncestor",
 		"test": "run-s test-ci test-badges",
-		"test-badges": "jest-coverage-badges output ./badges",
+		"test-badges": "cat coverage/lcov.info | npx coverbadge -o ./badges/coverage.svg",
+		"format": "pretty-quick --staged",
 		"watch-ts": "tsc-watch -p tsconfig.build.json",
-		"watch-test": "nodemon --watch src -e ts,json -x 'run-s test'"
+		"watch-test": "nodemon --watch src -e ts,json -x 'run-s test'",
+		"before-commit": "run-s format test test-badges commit-badges",
+		"commit-badges": "git add './badges/coverage.svg'"
 	},
 	"author": {
 		"email": "npm@iampeterbanjo.com",
@@ -25,7 +28,7 @@
 	],
 	"husky": {
 		"hooks": {
-			"pre-commit": "pretty-quick --staged"
+			"pre-commit": "npm run before-commit"
 		}
 	},
 	"license": "ISC",
