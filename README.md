@@ -156,4 +156,4 @@ See our [contributing guidelines](https://github.com/sholladay/hapi-doorkeeper/b
 [hapi-doorkeeper]: https://github.com/sholladay/hapi-doorkeeper
 [hapi]: https://hapijs.com
 [auth0]: https://auth0.com
-[test-coverage]: ./badges/badge-lines.svg
+[test-coverage]: ./badges/coverage.svg
