@@ -77,5 +77,4 @@ export default {
 	register,
 	name: vars.name,
 	version: vars.version,
-	dependencies: ['@hapi/cookie', '@hapi/bell'],
 };

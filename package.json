@@ -2,10 +2,11 @@
 	"name": "hapi-hodor",
 	"version": "1.0.0",
 	"description": "",
-	"main": "build/index.js",
+	"main": "build/src/index.js",
 	"scripts": {
 		"build": "tsc -p tsconfig.build.json",
 		"prebuild": "rm -rf build",
+		"postinstall": "run-s build",
 		"clean": "rm -rf node_modules",
 		"test-ci": "CI=true jest",
 		"test-jest": "node --trace-warnings node_modules/.bin/jest --changedFilesWithAncestor",
