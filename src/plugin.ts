@@ -47,30 +47,8 @@ const register = async (server, option) => {
 
 	const controller = new Controller(config);
 
-	server.route({
-		method: 'GET',
-		path: '/login',
-		config: {
-			description: 'Begin a user session',
-			tags: ['user', 'auth', 'session', 'login'],
-			auth: {
-				strategy: 'auth0',
-				mode: 'try',
-			},
-		},
-		handler: controller.handleLogin,
-	});
-
-	server.route({
-		method: 'GET',
-		path: '/logout',
-		config: {
-			description: 'End a user session',
-			tags: ['user', 'auth', 'session', 'logout'],
-			auth: false,
-		},
-		handler: controller.handleLogout,
-	});
+	controller.handleLogin(server);
+	controller.handleLogout(server);
 };
 
 export default {
