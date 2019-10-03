@@ -323,3 +323,24 @@ test('When GET /logout rejects absolute urls for next like encoded schemeless', 
 		'Absolute URLs are not allowed in the `next` parameter for security reasons',
 	);
 });
+
+test('When registered jwt strategy is enabled', async () => {
+	const server = await makeServer();
+
+	const createSecureRoute = () => {
+		server.route({
+			method: 'GET',
+			path: '/api/private',
+			config: {
+				auth: 'jwt',
+				handler: (req, res) => {
+					res({
+						message: 'So secure.',
+					});
+				},
+			},
+		});
+	};
+
+	expect(createSecureRoute).not.toThrow();
+});

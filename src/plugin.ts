@@ -1,6 +1,8 @@
 import Bell from '@hapi/bell';
 import Cookie from '@hapi/cookie';
 import Accept from '@hapi/accept';
+import Jwt from 'hapi-auth-jwt2';
+import JwksRsa from 'jwks-rsa';
 
 import { vars, getConfig, time } from './utils';
 import Controller from './controller';
@@ -14,7 +16,7 @@ const redirectTo = ({ headers }) => {
 const register = async (server, option) => {
 	const config = getConfig(option);
 
-	await server.register([Cookie, Bell]);
+	await server.register([Cookie, Bell, Jwt]);
 
 	server.auth.strategy('session', 'cookie', {
 		validateFunc: config.validateFunc,
@@ -43,6 +45,28 @@ const register = async (server, option) => {
 		isSecure: config.isSecure,
 		forceHttps: config.forceHttps,
 		providerParams: config.providerParams,
+	});
+
+	server.auth.strategy('jwt', 'jwt', {
+		complete: true,
+		key: JwksRsa.hapiJwt2Key({
+			cache: true,
+			rateLimit: true,
+			jwksRequestsPerMinute: 5,
+			jwksUri: `https://${config.auth0Domain}/.well-known/jwks.json`,
+		}),
+		verifyOptions: {
+			audience: config.auth0Domain,
+			issuer: `https://${config.auth0Domain}/`,
+			algorithms: ['RS256'],
+		},
+		validate: function(decoded, request, h) {
+			if (!decoded.id) {
+				return { valid: false };
+			}
+
+			return { valid: true };
+		},
 	});
 
 	const controller = new Controller(config);
