@@ -1,5 +1,15 @@
 import Hapi from '@hapi/hapi';
 import plugin from './plugin';
+import jwt from 'jsonwebtoken';
+
+import { getConfig } from './utils';
+import { PRIVATE_KEY, PUBLIC_KEY } from '../fixtures';
+
+jest.mock('jwks-rsa', () => {
+	return {
+		hapiJwt2Key: () => PUBLIC_KEY,
+	};
+});
 
 const makeRoute = (option = {}) => {
 	return {
@@ -12,18 +22,21 @@ const makeRoute = (option = {}) => {
 	};
 };
 
+const options = {
+	sessionSecretKey: 'pleasemakethissignificantlymoresecure',
+	auth0Domain: 'my-app.auth0.com',
+	auth0PublicKey: 'someclientid',
+	auth0SecretKey: 'evenmoresecretthanthesessionsecretkey',
+};
+const config = getConfig(options);
+
 const makeServer = async (option = {}) => {
 	const server = new Hapi.server();
 
 	await server.register([
 		{
 			plugin,
-			options: {
-				sessionSecretKey: 'pleasemakethissignificantlymoresecure',
-				auth0Domain: 'my-app.auth0.com',
-				auth0PublicKey: 'someclientid',
-				auth0SecretKey: 'evenmoresecretthanthesessionsecretkey',
-			},
+			options,
 		},
 	]);
 
@@ -333,14 +346,72 @@ test('When registered jwt strategy is enabled', async () => {
 			path: '/api/private',
 			config: {
 				auth: 'jwt',
-				handler: (req, res) => {
-					res({
-						message: 'So secure.',
-					});
-				},
+			},
+			handler: () => {
+				return {
+					message: 'So secure.',
+				};
 			},
 		});
 	};
 
 	expect(createSecureRoute).not.toThrow();
+});
+
+test('When GET /api/private without token response is 401', async () => {
+	const server = await makeServer();
+
+	server.route({
+		method: 'GET',
+		path: '/api/private',
+		config: {
+			auth: 'jwt',
+		},
+		handler: (request, reply) => {
+			return {
+				message: 'So secure.',
+			};
+		},
+	});
+
+	const response = await server.inject({
+		url: '/api/private',
+	});
+
+	expect(response.statusCode).toEqual(401);
+});
+
+test('When GET /api/private with token, response is 200 and signed data is in request.auth.credentials', async () => {
+	const server = await makeServer();
+	const data = { id: 1 };
+	let payload;
+	const token = jwt.sign(data, PRIVATE_KEY, {
+		audience: config.auth0Domain,
+		issuer: `https://${config.auth0Domain}/`,
+		algorithm: 'RS256',
+	});
+	server.route({
+		method: 'GET',
+		path: '/api/private',
+		config: {
+			auth: 'jwt',
+		},
+		handler: (request, reply) => {
+			payload = request.auth.credentials.payload;
+
+			return {
+				message: 'So secure.',
+			};
+		},
+	});
+
+	const response = await server.inject({
+		url: '/api/private',
+		headers: {
+			authorization: `Bearer ${token}`,
+		},
+	});
+
+	expect(response.statusCode).toEqual(200);
+	expect(payload).toEqual(expect.objectContaining(data));
 });

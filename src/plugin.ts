@@ -60,12 +60,8 @@ const register = async (server, option) => {
 			issuer: `https://${config.auth0Domain}/`,
 			algorithms: ['RS256'],
 		},
-		validate: function(decoded, request, h) {
-			if (!decoded.id) {
-				return { valid: false };
-			}
-
-			return { valid: true };
+		validate: async function(decoded) {
+			return { isValid: typeof decoded.id === 'number' };
 		},
 	});
 
