@@ -9,6 +9,7 @@
 		"build",
 		"./factory",
 		"./fixtures",
-		"**/*.test.ts"
+		"**/*.test.ts",
+		"**/*.spec.ts"
 	]
 }
