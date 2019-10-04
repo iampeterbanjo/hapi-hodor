@@ -383,7 +383,7 @@ test('When GET /api/private without token response is 401', async () => {
 
 test('When GET /api/private with token, response is 200 and signed data is in request.auth.credentials', async () => {
 	const server = await makeServer();
-	const data = { id: 1 };
+	const data = { user_id: 'auth0|5d884e0d674a210df011g169' };
 	let payload;
 	const token = jwt.sign(data, PRIVATE_KEY, {
 		audience: config.auth0Domain,

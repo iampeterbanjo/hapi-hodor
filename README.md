@@ -55,7 +55,7 @@ const init = async () => {
 init();
 ```
 
-When using a JWT Bearer token in your request header setup your routes like this:
+When using a JWT Bearer token in your request header setup your routes like below. Note that the auth strategy, validate function ONLY checks for the existence of a `user_id` which will be set by Auth0.
 
 ```JavaScript
 server.route({
