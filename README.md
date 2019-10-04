@@ -55,6 +55,27 @@ const init = async () => {
 init();
 ```
 
+When using a JWT Bearer token in your request header setup your routes like this:
+
+```JavaScript
+server.route({
+  method: 'GET',
+  path: '/api/private',
+  config: {
+    auth: 'jwt',
+  },
+  handler: (request, reply) => {
+    // if you want to validate the existence of a user
+    const { user } = request.auth.credentials;
+    if(!user) throw Boom.unauthorized();
+
+    return {
+      message: 'So secure.',
+    };
+  },
+});
+```
+
 In the example above, only logged in users are able to access `/dashboard`, as denoted by the `session` strategy being `required`. If you are logged in, it will display your profile, otherwise it will redirect you to a login screen and after you log in it will redirect you back to `/dashboard`.
 
 Authentication is managed by [Auth0](https://auth0.com/). A few steps are required to finish the integration.
