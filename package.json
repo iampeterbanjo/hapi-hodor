@@ -1,6 +1,6 @@
 {
 	"name": "hapi-hodor",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Hapi Auth0 authentication plugin for sessions and JWT",
 	"main": "build/src/index.js",
 	"homepage": "https://github.com/iampeterbanjo/hapi-hodor",
