@@ -7,7 +7,7 @@ import { PRIVATE_KEY, PUBLIC_KEY } from '../fixtures';
 
 jest.mock('jwks-rsa', () => {
 	return {
-		hapiJwt2Key: () => PUBLIC_KEY,
+		hapiJwt2KeyAsync: () => PUBLIC_KEY,
 	};
 });
 
@@ -24,6 +24,7 @@ const makeRoute = (option = {}) => {
 
 const options = {
 	sessionSecretKey: 'pleasemakethissignificantlymoresecure',
+	auth0Audience: 'https://my-app.auth0.com',
 	auth0Domain: 'my-app.auth0.com',
 	auth0PublicKey: 'someclientid',
 	auth0SecretKey: 'evenmoresecretthanthesessionsecretkey',
@@ -388,7 +389,7 @@ test('When GET /api/private with token, response is 200 and signed data is in re
 	const data = { user_id: 'auth0|5d884e0d674a210df011g169' };
 	let payload;
 	const token = jwt.sign(data, PRIVATE_KEY, {
-		audience: config.auth0Domain,
+		audience: config.auth0Audience,
 		issuer: `https://${config.auth0Domain}/`,
 		algorithm: 'RS256',
 	});

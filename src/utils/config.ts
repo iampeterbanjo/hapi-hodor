@@ -25,6 +25,9 @@ const configSchema = Joi.object()
 		sessionSecretKey: Joi.string()
 			.required()
 			.min(32),
+		auth0Audience: Joi.string()
+			.required()
+			.uri(),
 		auth0Domain: Joi.string()
 			.required()
 			.hostname()

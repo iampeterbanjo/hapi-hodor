@@ -3,7 +3,6 @@ import Cookie from '@hapi/cookie';
 import Accept from '@hapi/accept';
 import Jwt from 'hapi-auth-jwt2';
 import JwksRsa from 'jwks-rsa';
-
 import { vars, getConfig, time } from './utils';
 import Controller from './controller';
 
@@ -47,21 +46,23 @@ const register = async (server, option) => {
 		providerParams: config.providerParams,
 	});
 
+	const issuer = `https://${config.auth0Domain}/`;
 	server.auth.strategy('jwt', 'jwt', {
 		complete: true,
-		key: JwksRsa.hapiJwt2Key({
+		key: JwksRsa.hapiJwt2KeyAsync({
 			cache: true,
 			rateLimit: true,
 			jwksRequestsPerMinute: 5,
-			jwksUri: `https://${config.auth0Domain}/.well-known/jwks.json`,
+			jwksUri: `${issuer}.well-known/jwks.json`,
 		}),
 		verifyOptions: {
-			audience: config.auth0Domain,
-			issuer: `https://${config.auth0Domain}/`,
+			audience: config.auth0Audience,
+			issuer,
 			algorithms: ['RS256'],
 		},
-		validate: async function(decoded, request) {
-			return { isValid: typeof decoded.user_id !== 'undefined' };
+		validate: decoded => {
+			// see https://auth0.com/docs/tokens/guides/jwt/validate-jwt
+			return { isValid: decoded.iss === issuer };
 		},
 	});
 
