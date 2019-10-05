@@ -43,6 +43,8 @@ const makeServer = async (option = {}) => {
 	return server;
 };
 
+afterAll(jest.resetAllMocks);
+
 test('When Hodor is missing response is correct', async () => {
 	const server = new Hapi.Server();
 	server.route(makeRoute());
