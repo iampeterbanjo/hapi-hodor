@@ -1,33 +1,5 @@
 import Authority from './authority';
-import casual from 'casual';
-
-const domain = 'test.eu.auth0.com';
-const options = {
-	cache: true,
-	rateLimit: true,
-	jwksRequestsPerMinute: 5,
-	jwksUri: `https://${domain}/.well-known/jwks.json`,
-};
-
-const kid = casual.uuid;
-const azp = casual.uuid;
-const decoded = {
-	header: {
-		kid,
-		typ: 'JWT',
-		alg: 'RS256',
-	},
-	payload: {
-		azp,
-		iss: `https://${domain}/`,
-		sub: `${azp}@clients`,
-		aud: casual.url,
-		iat: 1570289133,
-		exp: 1570375533,
-		gty: 'client-credentials',
-	},
-	signature: casual.uuid,
-};
+import { options, decoded } from '../fixtures';
 
 describe('Given options and JwksRsa', () => {
 	test('When new Authority is created Jwks is called with options', () => {

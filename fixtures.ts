@@ -1,3 +1,35 @@
+import casual from 'casual';
+
+const domain = 'test.eu.auth0.com';
+const azp = casual.uuid;
+
+export const options = {
+	cache: true,
+	rateLimit: true,
+	jwksRequestsPerMinute: 5,
+	jwksUri: `https://${domain}/.well-known/jwks.json`,
+};
+
+export const kid = casual.uuid;
+
+export const decoded = {
+	header: {
+		kid,
+		typ: 'JWT',
+		alg: 'RS256',
+	},
+	payload: {
+		azp,
+		iss: `https://${domain}/`,
+		sub: `${azp}@clients`,
+		aud: casual.url,
+		iat: 1570289133,
+		exp: 1570375533,
+		gty: 'client-credentials',
+	},
+	signature: casual.uuid,
+};
+
 // openssl genrsa -out private_key.pem 2048
 export const PRIVATE_KEY = `
 -----BEGIN RSA PRIVATE KEY-----
