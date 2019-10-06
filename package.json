@@ -24,7 +24,9 @@
 		"before-commit": "run-s format test test-badges commit-badges",
 		"commit-badges": "git add './badges/coverage.svg'",
 		"release": "npm version",
-		"postrelease": "npm publish --registry https://registry.npmjs.org/"
+		"postrelease": "run-s git-publish npm-publish",
+		"git-publish": "git push origin master",
+		"npm-publish": "npm publish --registry https://registry.npmjs.org/"
 	},
 	"author": {
 		"email": "npm@iampeterbanjo.com",
