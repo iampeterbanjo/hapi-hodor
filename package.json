@@ -12,7 +12,6 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.build.json",
 		"prebuild": "rm -rf build",
-		"postinstall": "run-s build",
 		"clean": "rm -rf node_modules",
 		"test-ci": "CI=true jest",
 		"test-jest": "node --trace-warnings node_modules/.bin/jest --changedFilesWithAncestor",
@@ -24,6 +23,7 @@
 		"before-commit": "run-s format test test-badges commit-badges",
 		"commit-badges": "git add './badges/coverage.svg'",
 		"release": "npm version",
+		"prerelease": "run-s build",
 		"postrelease": "run-s git-publish npm-publish",
 		"git-publish": "git push origin master",
 		"npm-publish": "npm publish --registry https://registry.npmjs.org/"
